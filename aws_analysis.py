@@ -29,9 +29,11 @@ dag = DAG(
 python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
-                                    arguments=["print('hello world')"],
+                                    arguments=[
+                                        "print('\'{{ dag_run.conf["task"] }}\'')"
+                                    ],
                                     labels={"foo": "bar"},
-                                    name='\'{{ dag_run.conf["task"] }}\'',
+                                    name="loadfile",
                                     task_id="passing-task-python",
                                     get_logs=True,
                                     dag=dag
