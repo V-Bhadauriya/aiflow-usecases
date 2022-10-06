@@ -33,7 +33,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                         "print('Hello')"
                                     ],
                                     labels={"message": '{{ dag_run.conf.get("message") }}'},
-                                    name='{{ dag_run.conf.get("message") }}',
+                                    name='testing',
                                     task_id="passing-task-python",
                                     get_logs=True,
                                     dag=dag
