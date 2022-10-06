@@ -31,7 +31,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                     cmds=["python", "-c"],
                                     arguments=["print('hello world')"],
                                     labels={"foo": "bar"},
-                                    name=dag_run.conf['task'],
+                                    name=dag.conf['task'],
                                     task_id="passing-task-python",
                                     get_logs=True,
                                     dag=dag
