@@ -3,7 +3,7 @@ import logging
 from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import \
     KubernetesPodOperator
-from airflow.operators.dummy import DummyOperator, PythonOperator
+from airflow.operators.dummy import DummyOperator
 from datetime import datetime, timedelta
 
 # log = logging.getLogger(__name__)
@@ -26,23 +26,12 @@ dag = DAG(
 
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
-def run_this_func(ds, **kwargs):
-    print("Remotely received value of {} for key=message".
-          format(kwargs['dag_run'].conf['message']))
-
-
-run_this = PythonOperator(
-    task_id='run_this',
-    provide_context=True,
-    python_callable=run_this_func,
-    dag=dag,
-)
 
 python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
                                     arguments=["print('hello world')"],
-                                    labels={"foo": "bar"},
+                                    labels={"foo": "bar", "message": kwargs['dag_run'].conf['message']},
                                     name="passing-python",
                                     task_id="passing-task-python",
                                     get_logs=True,
