@@ -22,7 +22,7 @@ default_args = {
 }
 
 dag = DAG(
-    'kubernetes_sample', default_args=default_args,
+    'aws_analysis', default_args=default_args,
     schedule_interval=timedelta(minutes=10), tags=['example', 'kubernetes', 'python', 'bash' ])
 
 
