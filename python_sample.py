@@ -4,6 +4,7 @@ from airflow import DAG
 from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import \
     KubernetesPodOperator
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 
 # log = logging.getLogger(__name__)
