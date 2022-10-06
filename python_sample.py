@@ -27,6 +27,12 @@ dag = DAG(
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
 
+bash_task = BashOperator(
+    task_id="bash_task",
+    bash_command='echo "Here is the message: \'{{ dag_run.conf["message"] if dag_run else "" }}\'"',
+    dag=dag
+)
+
 python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
