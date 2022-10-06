@@ -29,11 +29,18 @@ dag = DAG(
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
 
-bash_task = BashOperator(
-    task_id="bash_task",
-    bash_command='echo "Here is the message: \'{{ dag_run.conf["message"] if dag_run else "" }}\'"',
-    dag=dag
-)
+def run_this_func(**context):
+    """
+    Print the payload "message" passed to the DagRun conf attribute.
+    :param context: The execution context
+    :type context: dict
+    """
+    print("context", context)
+    print("Remotely received value of {} for key=message".format(context["dag_run"].conf["message"]))
+
+#PythonOperator usage
+run_this = PythonOperator(task_id="run_this", python_callable=run_this_func, dag=dag, provide_context=True)
+
 
 python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
