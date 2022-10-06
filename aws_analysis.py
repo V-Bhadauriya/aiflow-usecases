@@ -19,7 +19,7 @@ default_args = {
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5),
-    'labels': '{{ dag_run.conf.get("message") }}'
+    'labels': {{ dag_run.conf.get("message") }}
 }
 
 dag = DAG(
