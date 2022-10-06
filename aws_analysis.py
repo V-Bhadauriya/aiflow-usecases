@@ -30,7 +30,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
                                     arguments=[
-                                        "print('\'{{ dag_run.conf["task"] }}\'')"
+                                        "print('{{ dag_run.conf.get("message") }}')"
                                     ],
                                     labels={"foo": "bar"},
                                     name="loadfile",
