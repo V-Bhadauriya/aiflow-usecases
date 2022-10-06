@@ -18,8 +18,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5),
-    'labels': {{ dag_run.conf.get("message") }}
+    'retry_delay': timedelta(minutes=5)
 }
 
 dag = DAG(
@@ -33,7 +32,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                     arguments=[
                                         "print('Hello')"
                                     ],
-                                    labels={"message": '{{ dag_run.conf.get("message") }}'},
+                                    labels={"message": "{{dag_run.conf.message}}" },
                                     name='testing',
                                     task_id="passing-task-python",
                                     get_logs=True,
