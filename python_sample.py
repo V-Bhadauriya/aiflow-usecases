@@ -26,6 +26,18 @@ dag = DAG(
 
 start = DummyOperator(task_id='run_this_first', dag=dag)
 
+def run_this_func(ds, **kwargs):
+    print("Remotely received value of {} for key=message".
+          format(kwargs['dag_run'].conf['message']))
+
+
+run_this = PythonOperator(
+    task_id='run_this',
+    provide_context=True,
+    python_callable=run_this_func,
+    dag=dag,
+)
+
 python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
