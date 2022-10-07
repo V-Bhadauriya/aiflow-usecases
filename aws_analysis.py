@@ -37,7 +37,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                     task_id="python-task-testing",
                                     env_vars= {
                                         "message": '{{ dag_run.conf.get("message") }}'
-                                    }
+                                    },
                                     get_logs=True,
                                     dag=dag
                                     )
