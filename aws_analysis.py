@@ -30,7 +30,7 @@ python_task = KubernetesPodOperator(namespace='default',
                                     image="python:3.6",
                                     cmds=["python", "-c"],
                                     arguments=[
-                                        "print('Hello')"
+                                        "import time; time.sleep(100)"
                                     ],
                                     labels={"message": "testing" },
                                     name="testing",
