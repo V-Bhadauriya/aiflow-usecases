@@ -26,18 +26,23 @@ dag = DAG(
     schedule_interval=timedelta(minutes=10), tags=['example', 'kubernetes', 'python', 'bash' ])
 
 
-python_task = KubernetesPodOperator(namespace='default',
-                                    image="python:3.6",
-                                    cmds=["python", "-c"],
-                                    arguments=[
-                                        "import time; time.sleep(100)"
-                                    ],
-                                    labels={"message": "testing" },
-                                    name="testing",
-                                    task_id="python-task-testing",
-                                    env_vars= {
-                                        "message": '{{ dag_run.conf.get("message") }}'
-                                    },
-                                    get_logs=True,
-                                    dag=dag
-                                    )
+do_task = KubernetesPodOperator(
+    namespace='default',
+    image="python:3.6",
+    cmds=["python", "/opt/aws-cost-analysis.py"],
+    labels={"Name": "aws-cost-analysis" },
+    name="aws-cost-analysis",
+    task_id="aws-cost-analysis-task",
+    env_vars= {
+        "BUCKET": '{{ dag_run.conf.get("BUCKET") }}',
+        "AWS_ACCESS_KEY_ID": '{{ dag_run.conf.get("AWS_ACCESS_KEY_ID") }}',
+        "AWS_SECRET_ACCESS_KEY": '{{ dag_run.conf.get("AWS_SECRET_ACCESS_KEY") }}',
+        "POSTGRES_HOST": '{{ dag_run.conf.get("POSTGRES_HOST") }}',
+        "POSTGRES_PORT": '{{ dag_run.conf.get("POSTGRES_PORT") }}',
+        "POSTGRES_DB": '{{ dag_run.conf.get("POSTGRES_DB") }}',
+        "POSTGRES_USER": '{{ dag_run.conf.get("POSTGRES_USER") }}',
+        "POSTGRES_PASSWORD": '{{ dag_run.conf.get("POSTGRES_PASSWORD") }}',
+    },
+    get_logs=True,
+    dag=dag
+)
